@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bnsilu.mapper.LoginMapper">
+	
+	<resultMap type="bnUsers" id="bnUsersMap">
+		<result property="uPkId" column="u_Pk_Id" />
+		<result property="uUsername" column="u_Username" />
+		<result property="uPassword" column="u_Password" />
+		<result property="uPhone" column="u_Phone" />
+		<result property="uEmail" column="u_Email" />
+		<result property="uCreateTime" column="u_Create_Time" />
+		<result property="uLastTime" column="u_Last_Time" />
+		<result property="uSalt" column="u_Salt" />
+		<result property="uState" column="u_State" />
+	</resultMap>
+	
+	<resultMap type="BnUsersVO" id="bnUsersVOMap">
+		<result property="uPkId" column="u_Pk_Id" />
+		<result property="uUsername" column="u_Username" />
+		<result property="uPhone" column="u_Phone" />
+		<result property="uEmail" column="u_Email" />
+		<result property="uCreateTime" column="u_Create_Time" />
+		<result property="uLastTime" column="u_Last_Time" />
+	</resultMap>
+	
+	<resultMap type="userPermissionVo" id="userPermissionVoMap">
+		<result property="rName" column="r_Name" />
+		<result property="pUrl" column="p_Url" />
+		<result property="pRemark" column="p_Remark" />
+	</resultMap>
+	<select id="queryUsername" resultMap="bnUsersMap">
+		SELECT  `u_username`,`u_state` FROM `bn_users` WHERE `u_username` = #{value}
+	</select>
+	
+	<select id="queryUserInfo" parameterType="java.lang.String" resultMap="bnUsersVOMap">
+		SELECT 
+		  `u_pk_id`,
+		  `u_username`,
+		  `u_phone`,
+		  `u_email`,
+		  `u_create_time`,
+		  `u_last_time`
+		FROM
+		   `bn_users`
+		WHERE 
+		  `u_username` = #{value}	and `u_state`='1'
+	</select>
+	
+	
+	<select id="queryPassword" parameterType="java.lang.String" resultMap="bnUsersMap">
+		SELECT 
+		  
+		  `u_username`,
+		  `u_password`,
+		  `u_salt`
+		 
+		FROM
+		   `bn_users`
+		WHERE 
+		  `u_username` = #{value} and `u_state`='1'
+	</select>
+	
+
+	<insert id="insertUser" parameterType="bnUsers">
+		INSERT INTO `bnsl`.`bn_users` (
+		  `u_username`,
+		  `u_password`,
+		  `u_create_time`,
+		  `u_salt`
+		) 
+		VALUES
+		  (
+		    #{uUsername},
+		    #{uPassword},
+		    curdate(),
+		    #{uSalt}
+		  )
+	</insert>
+	
+	<update id="updateLastTime">
+		UPDATE 
+		  `bnsl`.`bn_users` 
+		SET
+		  `u_last_time` = now() 
+		WHERE `u_pk_id` = #{value}
+	</update>
+	
+	<update id="updatePassword">
+		UPDATE 
+		  `bnsl`.`bn_users` 
+		SET
+		  `u_password` = #{uPassword} 
+		WHERE `u_username` = #{uUsername}	and `u_state`='1'
+	</update>
+	
+	<select id="queryPermission" resultMap="userPermissionVoMap">
+		SELECT r.`r_name`,p.`p_url`,p.`p_remark` FROM `bn_users` u LEFT JOIN `bn_user_role` ur  ON u.`u_pk_id`=ur.`u_pk_id`
+			LEFT JOIN `bn_role` r ON r.`r_pk_id`=ur.`r_pk_id`
+			LEFT JOIN `bn_role_permission` rp ON rp.`r_pk_id`=r.`r_pk_id`
+			LEFT JOIN `bn_permission` p ON p.`p_pk_id`=rp.`p_pk_id` 
+		WHERE u.`u_username`  = #{value}
+	</select>
+	
+	
+</mapper>

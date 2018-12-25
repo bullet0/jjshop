@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+		<meta name="format-detection" content="telephone=no" />
+		<title>登录注册</title>
+
+		<link rel="stylesheet" href="/base-core/css/reset.css" />
+		<link rel="stylesheet" href="/base-core/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="/base-core/css/login.css" />
+
+	</head>
+
+	<body>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-4 col-sm-8 col-xs-12  pull-right form form1">
+					<form class="form-horizontal" id="validForm" method="post">
+						<h3 class="text-center form_title">后台登录系统</h3>
+
+						<div class="form-group">
+							<label for="username1" class="col-sm-3 control-label">用户名</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" placeholder="请输入用户名" name="username1" id="username1" onblur="indexName()">
+								<label class="s1"></label>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="password1" class="col-sm-3 control-label">密码</label>
+							<div class="col-sm-9">
+								<input type="password" class="form-control" placeholder="请输入密码" name="password1" id="password1" onblur="indexWord()">
+								<label id="msg"></label>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-offset-3 col-sm-9">
+								<input type="submit" onclick="return allIndex()" class="btn btn-default" value="登 录">
+							</div>
+						</div>
+						<div class="col-md-offset-8 registered">
+							<a href="/base-core/pages/changePwd.html">忘记密码</a>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<!--Bootstrap 的所有 JavaScript 插件都依赖 jQuery-->
+		<script type="text/javascript" src="/base-core/js/jquery-3.3.1.min.js"></script>
+		<script type="text/javascript" src="/base-core/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="/base-core/js/jquery.validate.min.js"></script>
+		<!--登录密码加密-->
+		<script src="/base-core/js/jsencrypt.min.js"></script>
+		<script src="/base-core/js/components/core.js"></script>
+		<script src="/base-core/js/components/md5.js"></script>
+		<script src="/base-core/js/components/evpkdf.js"></script>
+		<script src="/base-core/js/components/enc-base64.js"></script>
+		<script src="/base-core/js/components/cipher-core.js"></script>
+		<script src="/base-core/js/components/aes.js"></script>
+		<script src="/base-core/js/components/hmac.js"></script>
+		<script src="/base-core/js/components/sha1.js"></script>
+		<script src="/base-core/js/components/sha256.js"></script>
+		<script src="/base-core/js/components/pad-zeropadding-min.js"></script>
+		<script type="text/javascript" src="/base-core/js/main.js"></script>
+
+	</body>
+
+</html>

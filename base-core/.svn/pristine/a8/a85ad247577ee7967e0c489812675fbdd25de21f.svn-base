@@ -1,0 +1,98 @@
+$(document).ready(function() {
+	$.ajax({
+		type: 'get',
+		url: '/base-core/authority/userInfo.action', //j5
+		async: true,
+		dataType: 'json',
+		success: function(result) {
+			var msg = result.body;
+			$('tbody').append(
+				'<tr>' +
+				'<td class="username">' + msg.uUsername + '</td>' +
+				'<td class="realName">' + msg.uPhone + '</td>' +
+				'<td class="userRole">' + msg.uEmail + '</td>' +
+				'<td>' + msg.uCreateTime + '</td>' +
+				'<td>' +
+				'<div class="hidden-sm hidden-xs btn-group">' +
+				'<button class="btn btn-xs btn-info show-update-form" data-toggle="modal" data-target="#user-form-div">' +
+				'<i class="ace-icon fa fa-pencil bigger-120" title="修改"></i>' +
+				'</button>' +
+				'</div>' +
+				'</td>' +
+				'</tr>'
+			);
+			//表单值
+			$('#form-add-username').val(msg.uUsername);
+			$('#form-add-tel').val(msg.uPhone);
+			$('#form-add-email').val(msg.uEmail);
+			$('#form-add-ctime').val(msg.uCreateTime);
+		}
+	});
+	//获取id
+	var n = JSON.parse(sessionStorage.getItem('key')).id;
+	console.log(n)
+	$('.role-submit').on('click', function() {
+		if($('#form-add-username').val() == '') {
+			showTips('用户名不能为空');
+			return false;
+		} else {
+			true;
+		};
+		if($('#form-add-email').val() == '') {
+			showTips('邮箱不能为空');
+			return false;
+		} else {
+			if(!/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test($('#form-add-email').val())){
+				showTips("请输入正确的邮箱格式");
+				return false;
+			}else{
+				true;
+			}
+		};
+		if($('#form-add-tel').val() == '') {
+			showTips('手机号码不能为空');
+			return false;
+		} else {
+			if(!/^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$/.test($('#form-add-tel').val())){
+				showTips("请输入正确的手机格式");
+				return false;
+			}else{
+				true;
+			}
+		};
+		$.ajax({
+			type:"put",
+			url:"/base-core/authority/user/" + n + ".action", //j6
+			async:true,
+			date: {
+				'uUsername' : $('#form-add-username').val(),
+				'uPhone' : $('#form-add-tel').val(),
+				'uEmail' : $('#form-add-email').val()
+			},
+			success: function(msg){
+				if(msg.state == "200"){
+					showTips('用户状态修改成功');
+					$("#user-form-div").modal("hide");
+				}else{
+					showTips('请您稍后重试');
+					$("#user-form-div").modal("hide");
+				}
+			}
+		});
+	})
+});
+//提示框
+
+function showTips(content) {
+	$("#op-tips-content").html(content);
+	$("#op-tips-dialog").modal("show");
+}
+//检测为特殊字符
+function isSpecial(obj) {
+	if(!/^([\u4e00-\u9fa5A-Za-z0-9,.?!;，。？！、；])*$/.test(obj)) {
+		showTips("不能输入特殊字符");
+		return false;
+	} else {
+		return true;
+	}
+}
