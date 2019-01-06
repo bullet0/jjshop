@@ -1,0 +1,24 @@
+$(document).ready(function() {
+	$.ajax({
+		type: 'GET',
+		url: '/base-core/authority/userInfo.action', //接口5：获取当前用户信息
+		async: true,
+		dataType: 'json',
+		success: function(result) {
+			var msg = result.body.uUsername;
+			$('.user_name').html(msg);
+			var storeUp = {
+				'name': result.body.uUsername,
+				'id'  : result.body.uPkId,
+			};
+			localStorage.setItem('key', JSON.stringify(storeUp));
+
+		},
+		error: function() {
+			$('.user_name').html();
+		}
+	});
+	
+	//console.log(JSON.parse(localStorage.getItem('key')).name);
+	//console.log(JSON.parse(localStorage.getItem('key')).id);
+});
